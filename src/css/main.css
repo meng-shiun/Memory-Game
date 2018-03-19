@@ -1,0 +1,79 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: orange;
+}
+
+.container {
+  background-color: pink;
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.container > section {
+  width: 100%;
+}
+
+/*---------------------------------------------------------*
+                        Status Board
+----------------------------------------------------------*/
+.status-board {
+  text-align: center;
+  background-color: #a1b25b;
+}
+
+.reset-btn {
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+/*---------------------------------------------------------*
+                        Game Board
+----------------------------------------------------------*/
+.board {
+  width: 100%;
+  padding: 0.1em;
+  margin-top: 1em;
+  height: 80vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 20%;
+  height: 5em;
+  margin: 0.4em;
+}
+
+.card.match {
+  background-color: green;
+}
+
+.card-cover {
+  background-color: salmon;
+  cursor: pointer;
+}
+
+.card-show {
+  background-color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+/*---------------------------------------------------------*
+                        TODO
+----------------------------------------------------------*/
