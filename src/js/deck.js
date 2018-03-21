@@ -5,14 +5,14 @@ class Deck {
     this.cardsPair = [];
     this.deckCards = []; // A shuffled deck of cards
 
-    let cardA = 'Cat',
-        cardB = 'Orange',
-        cardC = '333',
-        cardD = 'Space',
-        cardE = 'Game',
-        cardF = 'Cake',
-        cardG = 'Apple',
-        cardH = 'Tree';
+    let cardA = 'coffee',
+        cardB = 'docker',
+        cardC = 'gamepad',
+        cardD = 'gem',
+        cardE = 'heart',
+        cardF = 'lemon',
+        cardG = 'rocket',
+        cardH = 'snowflake';
 
     cards.push(cardA, cardB, cardC, cardD, cardE, cardF, cardG, cardH);
     this.cardsPair = [...cards, ...cards];
@@ -20,8 +20,8 @@ class Deck {
 
   // Shuffle cards and put them in randomized slots
   shuffle(cardsCount) {
-    let takenSlots = []; // Store random slot id without duplication
-    this.shuffleDeck = []; // Shuffled cards in random slot
+    let takenSlots = [];    // Store random slot id without duplication
+    this.shuffleDeck = [];  // Shuffled cards in random slot
 
     for (let card of this.cardsPair) {
       this.shuffleDeck.push({name: card, slot: 0});
@@ -37,15 +37,30 @@ class Deck {
     }
   }
 
-  // Generate cards in random slot
+  // Generate cards for deckCards[]
   buildCards() {
-    for (let el of this.shuffleDeck) {
-      let card = new Card(el.name, el.slot);
+    for (let c of this.shuffleDeck) {
+      let card = new Card(c.name, c.slot);
       this.deckCards.push(card);
     }
   }
 
-  // Get the card according to its slot ID
+
+  buildCardsHTML() {
+    const board = document.body.querySelector('.board');
+
+    this.deckCards.sort((a, b) => { return a.slot - b.slot });
+
+    for (let c of this.deckCards) {
+      let card = `<div id="${c.slot}" class="card card-cover">
+                  <img src="img/${c.name}.svg" id="icon-${c.slot}"
+                  class="card-icon-hide">Cover</div>`;
+
+      board.insertAdjacentHTML('beforeend', card);
+    }
+  }
+
+  // Return the card obj according to its slot ID
   getCard(slotID) {
     for (let card of this.deckCards) {
       if (card.slot == slotID) {
@@ -55,6 +70,3 @@ class Deck {
   }
 
 }
-
-
-// TODO: Check if two cards match

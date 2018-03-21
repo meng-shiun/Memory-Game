@@ -64,6 +64,15 @@ html {
   background-color: white;
 }
 
+.card-icon-hide {
+  opacity: 0;
+  width: 5em;
+}
+
+.card-icon-show {
+  opacity: 1;
+  width: 5em;
+}
 
 
 

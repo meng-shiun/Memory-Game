@@ -13,7 +13,8 @@ gulp.task('css', () => {
 
 gulp.task('js', (cb) => {
   pump([
-      gulp.src('src/**/*.js'),
+      gulp.src(['src/js/card.js', 'src/js/deck.js', 'src/js/statusBoard.js',
+      'src/js/scoreBoard.js', 'src/js/main.js']),
       sourcemaps.init(),
       babel({
         presets: ['@babel/env']
