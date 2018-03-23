@@ -14,27 +14,28 @@ function () {
 
     this.name = name;
     this.slot = slot;
-    this.board = document.querySelector('#board'); //TODO: Add image to card
+    this.board = document.querySelector('#board');
+    this.isTriggered = false;
   }
 
   _createClass(Card, [{
     key: "flipCard",
     value: function flipCard() {
-      var selectedSlot = this.board.children[this.slot]; // Show card's name
+      var selectedSlot = this.board.children[this.slot]; // Show card's name & add fliping animation
 
-      selectedSlot.textContent = this.name;
-      selectedSlot.classList.add('card-show');
-      selectedSlot.classList.remove('card-cover'); // Show card's image
-
-      var img = document.createElement('img');
-      var content = "<img src=\"img/".concat(this.name, ".svg\" id=\"icon-").concat(this.slot, "\" class=\"card-icon-show\">");
-      img.insertAdjacentHTML('afterbegin', content);
-      selectedSlot.appendChild(img); // TODO: animate image
+      selectedSlot.classList.add('card-show', 'back-flip');
+      selectedSlot.classList.remove('card-cover');
     }
   }], [{
     key: "cardsMatch",
-    value: function cardsMatch(card1, card2) {// TODO: When cards match, play animation
-      // this.board.children[this.slot].classList.remove('card-cover');
+    value: function cardsMatch(card1, card2) {
+      var cards = [card1.board.children[card1.slot], card2.board.children[card2.slot]];
+      setTimeout(function () {
+        cards.forEach(function (c) {
+          c.children[1].classList.remove('touch');
+          c.classList.add('match', 'bounce');
+        });
+      }, 400);
     }
   }, {
     key: "cardsNoMatch",
@@ -42,11 +43,17 @@ function () {
       var cards = [card1.board.children[card1.slot], card2.board.children[card2.slot]];
       setTimeout(function () {
         cards.forEach(function (c) {
+          c.classList.add('shake');
           c.classList.remove('card-show');
+          c.classList.add('no-match');
+          setTimeout(function () {
+            c.classList.remove('no-match', 'back-flip', 'shake');
+          }, 900);
           c.classList.add('card-cover');
-          c.textContent = 'Flip back';
         });
-      }, 500); // TODO: play animation
+      }, 400);
+      card1.isTriggered = false;
+      card2.isTriggered = false;
     }
   }, {
     key: "init",
@@ -59,7 +66,6 @@ function () {
       try {
         for (var _iterator = board.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var _el = _step.value;
-          _el.textContent = 'reset card';
 
           var isFlipped = _el.classList.contains('card-show');
 
@@ -102,14 +108,14 @@ function () {
     this.cardsPair = [];
     this.deckCards = []; // A shuffled deck of cards
 
-    var cardA = 'coffee',
-        cardB = 'docker',
-        cardC = 'gamepad',
-        cardD = 'gem',
-        cardE = 'heart',
-        cardF = 'lemon',
-        cardG = 'rocket',
-        cardH = 'snowflake';
+    var cardA = 'fas fa-coffee',
+        cardB = 'fab fa-docker',
+        cardC = 'fas fa-gamepad',
+        cardD = 'far fa-gem',
+        cardE = 'fas fa-heart',
+        cardF = 'far fa-lemon',
+        cardG = 'fas fa-rocket',
+        cardH = 'far fa-snowflake';
     cards.push(cardA, cardB, cardC, cardD, cardE, cardF, cardG, cardH);
     this.cardsPair = cards.concat(cards);
   } // Shuffle cards and put them in randomized slots
@@ -188,7 +194,9 @@ function () {
   }, {
     key: "buildCardsHTML",
     value: function buildCardsHTML() {
-      var board = document.body.querySelector('.board');
+      var board = document.body.querySelector('.board'); // Clear board
+
+      board.innerHTML = '';
       this.deckCards.sort(function (a, b) {
         return a.slot - b.slot;
       });
@@ -199,7 +207,7 @@ function () {
       try {
         for (var _iterator3 = this.deckCards[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
           var _c2 = _step3.value;
-          var card = "<div id=\"".concat(_c2.slot, "\" class=\"card card-cover\">\n                  <img src=\"img/").concat(_c2.name, ".svg\" id=\"icon-").concat(_c2.slot, "\"\n                  class=\"card-icon-hide\">Cover</div>");
+          var card = "<div id=\"".concat(_c2.slot, "\" class=\"card card-cover back\"><i class=\"").concat(_c2.name, "\"></i><div class=\"touch\"></div></div>");
           board.insertAdjacentHTML('beforeend', card);
         }
       } catch (err) {
@@ -276,6 +284,14 @@ function () {
       this.matchCount = 0;
       this.starsCount = 3;
       this.matchQueue = []; // Check if two cards in the queue are matched
+      // Reset star icons
+
+      this.threeStars = document.querySelector('#three-stars');
+      this.twoStars = document.querySelector('#two-stars');
+      this.oneStar = document.querySelector('#one-star');
+      this.oneStar.classList.add('star-hide');
+      this.twoStars.classList.add('star-hide');
+      this.threeStars.classList.remove('star-hide');
     }
   }, {
     key: "addMove",
@@ -283,7 +299,15 @@ function () {
       this.maxClick++;
       this.moveCount++;
       this.matchQueue.push(selectedCard);
-      this.starsCount = this.moveCount >= 30 ? 1 : this.moveCount >= 20 ? 2 : 3;
+      this.starsCount = this.moveCount >= 30 ? 1 : this.moveCount >= 20 ? 2 : 3; // Update star icons
+
+      if (this.starsCount == 2) {
+        this.threeStars.classList.add('star-hide');
+        this.twoStars.classList.remove('star-hide');
+      } else if (this.starsCount == 1) {
+        this.twoStars.classList.add('star-hide');
+        this.oneStar.classList.remove('star-hide');
+      }
     }
   }, {
     key: "checkMatch",
@@ -296,9 +320,8 @@ function () {
         } else {
           // If two cards don't match, flip both cards back
           Card.cardsNoMatch(this.matchQueue[0], this.matchQueue[1]);
-        }
+        } // Reset maxClick and match queue
 
-        this.matchCount == 8 ? ScoreBoard.finalResult() : false; // Reset maxClick and match queue
 
         this.maxClick = 0;
         this.matchQueue = [];
@@ -310,112 +333,66 @@ function () {
 }();
 "use strict";
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var ScoreBoard =
-/*#__PURE__*/
-function () {
-  function ScoreBoard() {
-    _classCallCheck(this, ScoreBoard);
-  }
-
-  _createClass(ScoreBoard, null, [{
-    key: "finalResult",
-    value: function finalResult() {
-      alert('Stage clear!');
-    } // TODO: Build socre board modal
-
-  }]);
-
-  return ScoreBoard;
-}();
-"use strict";
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
 var deck = new Deck();
 var statusBoard = new StatusBoard();
 var move = document.querySelector('#move-count');
+var statusMoves = document.querySelector('#status-moves');
 var matchCount = document.querySelector('#match-count');
-var stars = document.querySelector('#stars');
+var stars = document.querySelector('#star-count');
 var resetBtn = document.querySelector('#reset');
 var timerShown = document.querySelector('#timer');
+var scoreBoard = document.querySelector('#score-board');
 var timeElapsed = Number(timerShown.textContent);
 var timer;
 document.addEventListener('DOMContentLoaded', function () {
-  var _console;
-
   deck.shuffle(16);
   deck.buildCards();
   deck.buildCardsHTML();
   statusBoard.init();
   deck.deckCards.sort(function (a, b) {
     return a.slot - b.slot;
-  });
-
-  (_console = console).log.apply(_console, _toConsumableArray(deck.deckCards));
+  }); // console.log(...deck.deckCards);
 });
 document.querySelector('main').addEventListener('click', function (e) {
   // If click on card
-  if (e.target.classList.contains('card-cover')) {
-    // Return a card of Card class
-    var selectedCard = deck.getCard(e.target.id) || null;
-    selectedCard.flipCard(); // Add one move & push first card obj in pair queue
+  if (e.target.classList.contains('touch')) {
+    var cardID = e.target.parentNode.id;
+    var currentCard = deck.getCard(cardID) || null; // If card is already clicked
 
-    statusBoard.addMove(selectedCard); // Check if second card obj match in pair queue
+    if (currentCard.isTriggered) return;
+    currentCard.isTriggered = true;
+    currentCard.flipCard(); // Add one move & push first card obj in pair queue
 
-    statusBoard.checkMatch();
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+    statusBoard.addMove(currentCard); // Check if second card obj match in pair queue
 
-    try {
-      for (var _iterator = statusBoard.matchQueue[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        var _i = _step.value;
-        console.log("click count: ".concat(statusBoard.maxClick, " || ").concat(_i.name, " in match queue"));
-      }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
-    }
-
-    console.log(statusBoard); // TODO: Disable click when playing card animation
-    // When click on first card, start timer
+    statusBoard.checkMatch(); // When click on first card, start timer
 
     move.textContent == 0 ? timer = setTimeout(timeCounter, 1000) : false;
   } // If click on reset button
 
 
-  e.target.id == 'reset' ? resetGame() : null;
+  e.target.id == 'reset' ? resetGame() : null; // If click on replay button
+
+  e.target.id == 'replay' ? resetGame() : null;
   updateStatus();
 }, true); // Show status on board
 
 var updateStatus = function updateStatus() {
   move.textContent = statusBoard.moveCount;
+  statusMoves.textContent = move.textContent;
   matchCount.textContent = statusBoard.matchCount;
-  stars.textContent = statusBoard.starsCount; // Stop timer when all cards are matched
+  stars.textContent = statusBoard.starsCount; // Stop timer when all cards are matched and show score board
 
-  matchCount.textContent == 8 ? clearTimeout(timer) : null;
+  if (matchCount.textContent == 8) {
+    scoreBoard.classList.remove('modal-hide');
+    scoreBoard.classList.add('modal-trans');
+    setTimeout(function () {
+      scoreBoard.classList.add('modal-show');
+    }, 1200);
+    clearTimeout(timer);
+  } else if (matchCount.textContent == 0) {
+    scoreBoard.classList.remove('modal-show');
+  }
 };
 
 var timeCounter = function timeCounter() {
@@ -428,7 +405,8 @@ var resetGame = function resetGame() {
   // Reset deck
   deck = new Deck();
   deck.shuffle(16);
-  deck.buildCards(); // Clear card pairs
+  deck.buildCards();
+  deck.buildCardsHTML(); // Clear card pairs
 
   Card.init(); // Reset moves, match count on status board
 
@@ -436,6 +414,9 @@ var resetGame = function resetGame() {
 
   timeElapsed = 0;
   timerShown.textContent = 0;
-  clearTimeout(timer);
-}; ///////////////////////////////////////////////////////
+  clearTimeout(timer); // Hide score board
+
+  scoreBoard.classList.remove('modal-show', 'modal-trans');
+  scoreBoard.classList.add('modal-hide');
+};
 //# sourceMappingURL=bundle.js.map

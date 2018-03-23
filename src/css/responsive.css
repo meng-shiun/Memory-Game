@@ -1,3 +1,114 @@
-h1 {
-  color: white;
+/*---------------------------------------------------------*
+                  Screen width ( > 575)
+----------------------------------------------------------*/
+@media screen and (min-width: 575px) {
+
+  .status-board {
+    margin: 3.0em 0 0.4em 0;
+  }
+
+  .board {
+    padding: 2.6em;
+    height: 80vh;
+  }
+
+  .card {
+    margin: 0 0.6em;
+    padding: 2.0em;
+  }
+
+  .full-img {
+    height: 100%;
+    background: #fff;
+  }
+}
+
+
+/*---------------------------------------------------------*
+                  Screen width ( > 768)
+----------------------------------------------------------*/
+@media screen and (min-width: 768px) {
+
+  h1 {
+    display: block;
+  }
+
+  .container > section {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .status-board {
+    margin: 1.0em 0 0.2em 0;
+    height: 8vh;
+  }
+
+  .status-block.stars {
+    padding-top: 1.6em;
+    padding-left: 4.0em;
+    font-size: 1.2em;
+  }
+
+  .status-block.reset {
+    padding-top: 1.2em;
+    padding-right: 4.0em;
+    font-size: 1.4em;
+  }
+
+  .board {
+    padding: 4.8em;
+    background-image: linear-gradient(120deg, #a6c0fe 0%, #f68084 100%);
+    -webkit-box-shadow: 11px 20px 35px 2px rgba(151,154,163,0.6);
+    -moz-box-shadow: 11px 20px 35px 2px rgba(151,154,163,0.6);
+    box-shadow: 11px 20px 35px 2px rgba(151,154,163,0.6);
+  }
+
+  .card {
+    padding: 2.6em;
+  }
+
+}
+
+
+
+/*---------------------------------------------------------*
+                  Screen width ( > 960)
+----------------------------------------------------------*/
+@media screen and (min-width: 960px){
+
+  .container {
+    padding: 1.4em 0;
+  }
+
+  .status-board {
+    width: 580px !important;
+    height: 64px;
+    text-align: center;
+  }
+
+  .status-block.stars {
+    padding-top: 1.8em;
+    padding-left: 0;
+    font-size: 1em;
+  }
+
+  .status-block.reset {
+    padding-top: 1.4em;
+    padding-right: 0;
+    font-size: 1.2em;
+  }
+
+  .board {
+    border-radius: 8px;
+    width: 560px !important;
+    height: 580px;
+    padding: 1.2em;
+  }
+
+  .card {
+    margin: 0.6em;
+    padding: 2.2em;
+    font-size: 1.2em;
+  }
+
 }

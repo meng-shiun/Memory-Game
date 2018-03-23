@@ -4,33 +4,30 @@ class Card {
     this.name = name;
     this.slot = slot;
     this.board = document.querySelector('#board');
-    //TODO: Add image to card
+    this.isTriggered = false;
   }
 
   flipCard() {
 
     let selectedSlot = this.board.children[this.slot];
 
-    // Show card's name
-    selectedSlot.textContent = this.name;
+    // Show card's name & add fliping animation
+    selectedSlot.classList.add('card-show', 'back-flip');
 
-    selectedSlot.classList.add('card-show');
     selectedSlot.classList.remove('card-cover');
 
-    // Show card's image
-    const img = document.createElement('img');
-
-    let content = `<img src="img/${this.name}.svg" id="icon-${this.slot}" class="card-icon-show">`;
-
-    img.insertAdjacentHTML('afterbegin', content);
-
-    selectedSlot.appendChild(img);
-    // TODO: animate image
   }
 
   static cardsMatch(card1, card2) {
-    // TODO: When cards match, play animation
-    // this.board.children[this.slot].classList.remove('card-cover');
+
+    let cards = [card1.board.children[card1.slot], card2.board.children[card2.slot]];
+
+    setTimeout(() => {
+      cards.forEach(c => {
+        c.children[1].classList.remove('touch');
+        c.classList.add('match', 'bounce');
+      });
+    }, 400);
   }
 
   static cardsNoMatch(card1, card2) {
@@ -39,22 +36,28 @@ class Card {
 
     setTimeout(() => {
       cards.forEach(c => {
+        c.classList.add('shake');
         c.classList.remove('card-show');
+        c.classList.add('no-match');
+        setTimeout(() => {
+          c.classList.remove('no-match', 'back-flip', 'shake');
+        }, 900);
         c.classList.add('card-cover');
-        c.textContent = 'Flip back';
       });
-    }, 500);
-    // TODO: play animation
+    }, 400);
+
+    card1.isTriggered = false;
+    card2.isTriggered = false;
   }
 
   static init() {
     const board = document.body.querySelector('.board');
 
     for (let el of board.children) {
-      el.textContent = 'reset card';
       let isFlipped = el.classList.contains('card-show');
       isFlipped ? el.classList.replace('card-show', 'card-cover') : false;
     }
+
   }
 
 

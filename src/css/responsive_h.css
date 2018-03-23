@@ -1,0 +1,33 @@
+/*---------------------------------------------------------*
+                  Screen height ( > 550)
+----------------------------------------------------------*/
+@media screen and (min-height: 550px) {
+
+  .status-board {
+    margin: 2.4em 0 0 0;
+  }
+
+  .board {
+    margin-top: 2.4em;
+  }
+}
+
+/*---------------------------------------------------------*
+                  Screen height ( < 385)
+----------------------------------------------------------*/
+@media screen and (max-height: 385px) {
+
+  .status-board {
+    margin: 0.1em 0 0 0;
+  }
+
+  .board {
+    margin-top: 0.5em;
+    height: 90vh;
+  }
+
+  .card {
+    margin: 0.2em;
+    padding: 1.2em;
+  }
+}

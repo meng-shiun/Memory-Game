@@ -5,14 +5,14 @@ class Deck {
     this.cardsPair = [];
     this.deckCards = []; // A shuffled deck of cards
 
-    let cardA = 'coffee',
-        cardB = 'docker',
-        cardC = 'gamepad',
-        cardD = 'gem',
-        cardE = 'heart',
-        cardF = 'lemon',
-        cardG = 'rocket',
-        cardH = 'snowflake';
+    let cardA = 'fas fa-coffee',
+        cardB = 'fab fa-docker',
+        cardC = 'fas fa-gamepad',
+        cardD = 'far fa-gem',
+        cardE = 'fas fa-heart',
+        cardF = 'far fa-lemon',
+        cardG = 'fas fa-rocket',
+        cardH = 'far fa-snowflake';
 
     cards.push(cardA, cardB, cardC, cardD, cardE, cardF, cardG, cardH);
     this.cardsPair = [...cards, ...cards];
@@ -49,13 +49,13 @@ class Deck {
   buildCardsHTML() {
     const board = document.body.querySelector('.board');
 
+    // Clear board
+    board.innerHTML = '';
+
     this.deckCards.sort((a, b) => { return a.slot - b.slot });
 
     for (let c of this.deckCards) {
-      let card = `<div id="${c.slot}" class="card card-cover">
-                  <img src="img/${c.name}.svg" id="icon-${c.slot}"
-                  class="card-icon-hide">Cover</div>`;
-
+      let card = `<div id="${c.slot}" class="card card-cover back"><i class="${c.name}"></i><div class="touch"></div></div>`;
       board.insertAdjacentHTML('beforeend', card);
     }
   }

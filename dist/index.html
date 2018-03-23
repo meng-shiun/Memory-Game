@@ -6,21 +6,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Memory Game</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
   <link rel="stylesheet" href="bundle.css">
   <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 </head>
 
 <body>
-  <h1>Matching Game</h1>
 
-  <main class="container">
+  <main class="container full-img">
+    <div id="score-board" class="modal-hide">
+      <h2>Congratulations! You Won!</h2>
+      <p><span id="star-count">0</span> Stars</p>
+      <p><span id="move-count">0</span> Moves</p>
+      <p><span id="timer">0</span> Seconds</p>
+      <p class="hide-match">Pair match:<span id="match-count">0</span></p>
+      <a id="replay" class="replay">Replay</a>
+    </div>
+
+    <h1>Matching Game</h1>
+
     <section class="status-board">
-      <p><span id="move-count">0</span>Moves</p>
-      <p>Pair match:<span id="match-count">0</span></p>
-      <p>Stars:<span id="stars">3</span></p>
-      <p>Timer:<span id="timer">0</span></p>
-      <a id="reset" class="reset-btn">reset</a>
+      <div class="status-block stars">
+
+        <!-- One star -->
+        <span id="one-star" class="star-hide">
+          <i class="fas fa-star"></i>
+          <i class="far fa-star"></i>
+          <i class="far fa-star"></i>
+        </span>
+
+        <!-- Two stars -->
+        <span id="two-stars" class="star-hide">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="far fa-star"></i>
+        </span>
+
+        <!-- Three stars -->
+        <span id="three-stars">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+        </span>
+        <span id="status-moves">0</span> Moves
+      </div>
+
+      <div class="status-block reset">
+        <a class="reset-btn"><i class="fas fa-redo-alt" id="reset"></i></a>
+      </div>
     </section>
 
     <section class="board" id="board">
