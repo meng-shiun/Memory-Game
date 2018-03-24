@@ -48,7 +48,7 @@ function () {
           c.classList.add('no-match');
           setTimeout(function () {
             c.classList.remove('no-match', 'back-flip', 'shake');
-          }, 900);
+          }, 700);
           c.classList.add('card-cover');
         });
       }, 400);
@@ -341,6 +341,7 @@ var matchCount = document.querySelector('#match-count');
 var stars = document.querySelector('#star-count');
 var resetBtn = document.querySelector('#reset');
 var timerShown = document.querySelector('#timer');
+var scoreTimer = document.querySelector('#score-timer');
 var scoreBoard = document.querySelector('#score-board');
 var timeElapsed = Number(timerShown.textContent);
 var timer;
@@ -348,10 +349,8 @@ document.addEventListener('DOMContentLoaded', function () {
   deck.shuffle(16);
   deck.buildCards();
   deck.buildCardsHTML();
-  statusBoard.init();
-  deck.deckCards.sort(function (a, b) {
-    return a.slot - b.slot;
-  }); // console.log(...deck.deckCards);
+  statusBoard.init(); // deck.deckCards.sort((a, b) => { return a.slot - b.slot });
+  // console.log(...deck.deckCards);
 });
 document.querySelector('main').addEventListener('click', function (e) {
   // If click on card
@@ -386,6 +385,7 @@ var updateStatus = function updateStatus() {
   if (matchCount.textContent == 8) {
     scoreBoard.classList.remove('modal-hide');
     scoreBoard.classList.add('modal-trans');
+    scoreTimer.textContent = timerShown.textContent;
     setTimeout(function () {
       scoreBoard.classList.add('modal-show');
     }, 1200);

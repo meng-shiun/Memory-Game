@@ -41,7 +41,7 @@ class Card {
         c.classList.add('no-match');
         setTimeout(() => {
           c.classList.remove('no-match', 'back-flip', 'shake');
-        }, 900);
+        }, 700);
         c.classList.add('card-cover');
       });
     }, 400);

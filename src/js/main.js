@@ -7,6 +7,7 @@ const matchCount  = document.querySelector('#match-count');
 const stars       = document.querySelector('#star-count');
 const resetBtn    = document.querySelector('#reset');
 const timerShown  = document.querySelector('#timer');
+const scoreTimer  = document.querySelector('#score-timer');
 const scoreBoard  = document.querySelector('#score-board');
 
 let timeElapsed   = Number(timerShown.textContent);
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   statusBoard.init();
 
-  deck.deckCards.sort((a, b) => { return a.slot - b.slot });
+  // deck.deckCards.sort((a, b) => { return a.slot - b.slot });
   // console.log(...deck.deckCards);
 });
 
@@ -70,6 +71,7 @@ const updateStatus = () => {
   if (matchCount.textContent == 8) {
     scoreBoard.classList.remove('modal-hide');
     scoreBoard.classList.add('modal-trans');
+    scoreTimer.textContent = timerShown.textContent;
     setTimeout(() => {
       scoreBoard.classList.add('modal-show');
     }, 1200);

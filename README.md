@@ -9,7 +9,7 @@ Visit [Memory Game](https://mengshiunlin.com/memory_game/) for the latest versio
 
 ## Built With
 
-* [Gulp] (https://gulpjs.com/)
+* [Gulp](https://gulpjs.com/)
 
 ## Todos & Bugs
 
