@@ -11,10 +11,15 @@ Visit [Memory Game](https://mengshiunlin.com/memory_game/) for the latest versio
 
 * [Gulp](https://gulpjs.com/)
 
+## Algorithm implemented
+
+* Fisher-Yates Shuffle [visualization](https://bost.ocks.org/mike/shuffle/), http://stackoverflow.com/a/2450976
+
 ## Todos & Bugs
 
 ### Todos
 
+* Use js library timer.js @ https://github.com/husa/timer.js/
 * Minify css and js file.
 * Add sound effect.
 * Improve design for mobile devices.

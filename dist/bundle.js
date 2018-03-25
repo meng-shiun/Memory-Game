@@ -119,26 +119,55 @@ function () {
     cards.push(cardA, cardB, cardC, cardD, cardE, cardF, cardG, cardH);
     this.cardsPair = cards.concat(cards);
   } // Shuffle cards and put them in randomized slots
+  // Shuffle function from https://bost.ocks.org/mike/shuffle/
 
 
   _createClass(Deck, [{
     key: "shuffle",
-    value: function shuffle(cardsCount) {
-      var takenSlots = []; // Store random slot id without duplication
+    value: function shuffle() {
+      var currentId = this.cardsPair.length;
+      var randomId; // random index
+      // While there remain elements to shuffle
 
-      this.shuffleDeck = []; // Shuffled cards in random slot
+      while (currentId !== 0) {
+        // Pick a remaining element
+        randomId = Math.floor(Math.random() * currentId);
+        currentId--; // Swap it with current element
 
+        var _ref = [this.cardsPair[currentId], this.cardsPair[randomId]];
+        this.cardsPair[randomId] = _ref[0];
+        this.cardsPair[currentId] = _ref[1];
+      }
+
+      return this.cardsPair;
+    } // Generate cards for deckCards[]
+
+  }, {
+    key: "buildCards",
+    value: function buildCards() {
+      for (var i in this.cardsPair) {
+        var card = new Card(this.cardsPair[i], i);
+        this.deckCards.push(card);
+      }
+    }
+  }, {
+    key: "buildCardsHTML",
+    value: function buildCardsHTML() {
+      var board = document.body.querySelector('.board'); // Clear board
+
+      board.innerHTML = '';
+      this.deckCards.sort(function (a, b) {
+        return a.slot - b.slot;
+      });
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
 
       try {
-        for (var _iterator = this.cardsPair[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _card = _step.value;
-          this.shuffleDeck.push({
-            name: _card,
-            slot: 0
-          });
+        for (var _iterator = this.deckCards[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _c = _step.value;
+          var card = "<div id=\"".concat(_c.slot, "\" class=\"card card-cover back\"><i class=\"").concat(_c.name, "\"></i><div class=\"touch\"></div></div>");
+          board.insertAdjacentHTML('beforeend', card);
         }
       } catch (err) {
         _didIteratorError = true;
@@ -154,27 +183,22 @@ function () {
           }
         }
       }
-
-      for (var i = 0; i < cardsCount; i++) {
-        var randomId = Math.floor(Math.random() * cardsCount); // Regenerate random id if slot is taken, otherwise store random id to takenSlots
-
-        takenSlots.indexOf(randomId) == -1 ? takenSlots.push(randomId) : i--;
-        this.shuffleDeck[i].slot = takenSlots[i];
-      }
-    } // Generate cards for deckCards[]
+    } // Return the card obj according to its slot ID
 
   }, {
-    key: "buildCards",
-    value: function buildCards() {
+    key: "getCard",
+    value: function getCard(slotID) {
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
       var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator2 = this.shuffleDeck[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var _c = _step2.value;
-          var card = new Card(_c.name, _c.slot);
-          this.deckCards.push(card);
+        for (var _iterator2 = this.deckCards[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var _card = _step2.value;
+
+          if (_card.slot == slotID) {
+            return _card;
+          }
         }
       } catch (err) {
         _didIteratorError2 = true;
@@ -187,71 +211,6 @@ function () {
         } finally {
           if (_didIteratorError2) {
             throw _iteratorError2;
-          }
-        }
-      }
-    }
-  }, {
-    key: "buildCardsHTML",
-    value: function buildCardsHTML() {
-      var board = document.body.querySelector('.board'); // Clear board
-
-      board.innerHTML = '';
-      this.deckCards.sort(function (a, b) {
-        return a.slot - b.slot;
-      });
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
-
-      try {
-        for (var _iterator3 = this.deckCards[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          var _c2 = _step3.value;
-          var card = "<div id=\"".concat(_c2.slot, "\" class=\"card card-cover back\"><i class=\"").concat(_c2.name, "\"></i><div class=\"touch\"></div></div>");
-          board.insertAdjacentHTML('beforeend', card);
-        }
-      } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-            _iterator3.return();
-          }
-        } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
-          }
-        }
-      }
-    } // Return the card obj according to its slot ID
-
-  }, {
-    key: "getCard",
-    value: function getCard(slotID) {
-      var _iteratorNormalCompletion4 = true;
-      var _didIteratorError4 = false;
-      var _iteratorError4 = undefined;
-
-      try {
-        for (var _iterator4 = this.deckCards[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-          var _card2 = _step4.value;
-
-          if (_card2.slot == slotID) {
-            return _card2;
-          }
-        }
-      } catch (err) {
-        _didIteratorError4 = true;
-        _iteratorError4 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-            _iterator4.return();
-          }
-        } finally {
-          if (_didIteratorError4) {
-            throw _iteratorError4;
           }
         }
       }
@@ -299,7 +258,7 @@ function () {
       this.maxClick++;
       this.moveCount++;
       this.matchQueue.push(selectedCard);
-      this.starsCount = this.moveCount >= 30 ? 1 : this.moveCount >= 20 ? 2 : 3; // Update star icons
+      this.starsCount = this.moveCount >= 48 ? 1 : this.moveCount >= 30 ? 2 : 3; // Update star icons
 
       if (this.starsCount == 2) {
         this.threeStars.classList.add('star-hide');
@@ -333,6 +292,14 @@ function () {
 }();
 "use strict";
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 var deck = new Deck();
 var statusBoard = new StatusBoard();
 var move = document.querySelector('#move-count');
@@ -346,11 +313,17 @@ var scoreBoard = document.querySelector('#score-board');
 var timeElapsed = Number(timerShown.textContent);
 var timer;
 document.addEventListener('DOMContentLoaded', function () {
-  deck.shuffle(16);
+  var _console;
+
+  deck.shuffle();
   deck.buildCards();
   deck.buildCardsHTML();
-  statusBoard.init(); // deck.deckCards.sort((a, b) => { return a.slot - b.slot });
-  // console.log(...deck.deckCards);
+  statusBoard.init();
+  deck.deckCards.sort(function (a, b) {
+    return a.slot - b.slot;
+  });
+
+  (_console = console).log.apply(_console, _toConsumableArray(deck.deckCards));
 });
 document.querySelector('main').addEventListener('click', function (e) {
   // If click on card
@@ -404,7 +377,7 @@ var timeCounter = function timeCounter() {
 var resetGame = function resetGame() {
   // Reset deck
   deck = new Deck();
-  deck.shuffle(16);
+  deck.shuffle();
   deck.buildCards();
   deck.buildCardsHTML(); // Clear card pairs
 

@@ -19,28 +19,28 @@ class Deck {
   }
 
   // Shuffle cards and put them in randomized slots
-  shuffle(cardsCount) {
-    let takenSlots = [];    // Store random slot id without duplication
-    this.shuffleDeck = [];  // Shuffled cards in random slot
+  // Shuffle function from https://bost.ocks.org/mike/shuffle/
+  shuffle() {
+    let currentId = this.cardsPair.length;
+    let randomId; // random index
 
-    for (let card of this.cardsPair) {
-      this.shuffleDeck.push({name: card, slot: 0});
+     // While there remain elements to shuffle
+    while(currentId !== 0) {
+      // Pick a remaining element
+      randomId = Math.floor(Math.random() * currentId);
+      currentId--;
+
+      // Swap it with current element
+      [this.cardsPair[randomId], this.cardsPair[currentId]] = [this.cardsPair[currentId], this.cardsPair[randomId]];
     }
 
-    for (let i = 0; i < cardsCount; i++) {
-      let randomId = Math.floor(Math.random() * cardsCount);
-
-      // Regenerate random id if slot is taken, otherwise store random id to takenSlots
-      takenSlots.indexOf(randomId) == -1 ? takenSlots.push(randomId) : i--;
-
-      this.shuffleDeck[i].slot = takenSlots[i];
-    }
+    return this.cardsPair;
   }
 
   // Generate cards for deckCards[]
   buildCards() {
-    for (let c of this.shuffleDeck) {
-      let card = new Card(c.name, c.slot);
+    for (let i in this.cardsPair) {
+      let card = new Card(this.cardsPair[i], i);
       this.deckCards.push(card);
     }
   }

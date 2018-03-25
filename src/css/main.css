@@ -116,7 +116,8 @@ h1 {
 }
 
 .card-cover svg {
-  color: #2f3442;
+  color: white;
+  /* color: #2f3442; */
   -webkit-transform: rotateY(0deg);
   transform: rotateY(0deg);
 }

@@ -21,7 +21,7 @@ class StatusBoard {
     this.maxClick++;
     this.moveCount++;
     this.matchQueue.push(selectedCard);
-    this.starsCount = (this.moveCount >= 30) ? 1 : (this.moveCount >= 20) ? 2 : 3;
+    this.starsCount = (this.moveCount >= 48) ? 1 : (this.moveCount >= 30) ? 2 : 3;
 
     // Update star icons
     if (this.starsCount == 2) {

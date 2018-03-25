@@ -15,14 +15,14 @@ let timer;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  deck.shuffle(16);
+  deck.shuffle();
   deck.buildCards();
   deck.buildCardsHTML();
 
   statusBoard.init();
 
-  // deck.deckCards.sort((a, b) => { return a.slot - b.slot });
-  // console.log(...deck.deckCards);
+  deck.deckCards.sort((a, b) => { return a.slot - b.slot });
+  console.log(...deck.deckCards);
 });
 
 document.querySelector('main').addEventListener('click', (e) => {
@@ -91,7 +91,7 @@ const timeCounter = () => {
 const resetGame = () => {
   // Reset deck
   deck = new Deck();
-  deck.shuffle(16);
+  deck.shuffle();
   deck.buildCards();
   deck.buildCardsHTML();
 
